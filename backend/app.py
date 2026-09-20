@@ -22,5 +22,13 @@ def monthly():
     result = query(sql)
     return jsonify(result)
 
+@app.route('/api/products')
+def products():
+    # 获取产品销量和营收数据
+    sql = "select g.goods_name, count(*) as total_amount from fact_order f left join dim_goods g on g.goods_id = f.goods_id group by g.goods_name order by total_amount desc"
+    result = query(sql)
+    return jsonify(result)
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port = 8080, debug=True)

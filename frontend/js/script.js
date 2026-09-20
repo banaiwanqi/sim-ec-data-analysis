@@ -16,7 +16,7 @@ fetch("api/summary")
     document.querySelector("#kpi-member .kpi-value").textContent = data.avg_member != null ? (Number(data.avg_member) * 100).toFixed(1) + "%" : "--";
 })
 
-// chart
+// 月销售折线图柱状图
 fetch("api/monthly")
 .then(r => r.json())
 .then(data => {
@@ -79,6 +79,49 @@ fetch("api/monthly")
                 },
                 smooth: true,
             }],
-        windowResize: true,
+    })
+})
+
+//销量排行
+fetch("api/products")
+.then(r => r.json())
+.then(data => {
+    const c = echarts.init(document.getElementById('chart-products'));
+    c.setOption({
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '10%', 
+            right: '8%',
+            top: '5%',
+            bottom: '8%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            name: '销量',
+            boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+            type: 'category',
+            data: data.map(d => d.goods_name),
+            inverse: true,
+            axisLabel: {
+                interval: 0,
+                fontSize: 11,        
+                width: 120,
+                
+            }
+
+        },
+        series: { 
+            data: data.map(d => d.total_amount), 
+            type: 'bar', 
+            itemStyle: { color: '#2563EB' }      
+        },
     })
 })
