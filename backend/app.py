@@ -18,7 +18,7 @@ def summary():
 @app.route('/api/monthly')
 def monthly():
     # 获取月度销量和营收数据
-    sql = "select d.month, sum(f.order_num) as total_quantity, sum(f.order_amount) as total_revenue from fact_order f left join dim_time d on d.time_id = f.time_id group by d.month order by d.month asc"
+    sql = "select concat(d.year, '-', lpad(d.month, 2, '0')) as month_year, sum(f.order_num) as total_quantity, sum(f.order_amount) as total_revenue from fact_order f left join dim_time d on d.time_id = f.time_id group by d.month, d.year order by d.year, d.month asc"
     result = query(sql)
     return jsonify(result)
 
@@ -26,6 +26,13 @@ def monthly():
 def products():
     # 获取产品销量和营收数据
     sql = "select g.goods_name, count(*) as total_amount from fact_order f left join dim_goods g on g.goods_id = f.goods_id group by g.goods_name order by total_amount desc"
+    result = query(sql)
+    return jsonify(result)
+
+@app.route('/api/regions')
+def regions():
+    # 获取地区销量和营收数据
+    sql = "select r.region_name, sum(f.order_num) as total_quantity, sum(f.order_amount) as total_revenue from fact_order f left join dim_region r on r.region_id = f.region_id group by r.region_name order by total_quantity desc"
     result = query(sql)
     return jsonify(result)
 

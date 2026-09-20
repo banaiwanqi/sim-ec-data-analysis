@@ -46,7 +46,7 @@ fetch("api/monthly")
             }},
         xAxis: {
             type: 'category',
-            data: data.map(d => d.month),
+            data: data.map(d => d.month_year),
         },
         yAxis: [
             {
@@ -68,6 +68,7 @@ fetch("api/monthly")
                 itemStyle: {
                     color: '#2563EB',
                 },
+                smooth: true,
             },
             {
                 name: '月营收',
