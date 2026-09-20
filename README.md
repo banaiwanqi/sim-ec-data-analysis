@@ -54,3 +54,5 @@ sim-ec-data-analysis/
 | `dim_pay` | 支付维度 | 3 | 支付方式维度 |
 
 > 模型说明：事实表`fact_order`通过外键关联5张维度表，实现多维度切片、上卷聚合。
+
+![](./img/er_dw_ecommerce.png)
