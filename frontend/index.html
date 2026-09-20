@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商销售数据</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./node_modules/echarts/dist/echarts.js"></script>
+
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <h1>电商销售数据 销售数据分析平台</h1>
+            <span class="header-subtitle">数据可视化分析</span>
+        </div>
+
+    </header>
+
+    <main class="container">
+        <section class="kpi-row">
+            <div class="kpi-card" id="kpi-qty">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">总销量</div>
+            </div>
+            <div class="kpi-card" id="kpi-rev">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">总营收</div>
+            </div>
+            <div class="kpi-card" id="kpi-records">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">记录条数</div>
+            </div>
+            <div class="kpi-card" id="kpi-member">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">3级会员占比</div>
+            </div>
+
+        </section>
+
+        <!-- 图表部分 -->
+        <section class="chart-grid">
+    </main class="container">
+        <div class="chart-card">
+            <h3>月度销量与营收趋势</h3>
+            <div id="chart-monthly" class="chart-box"></div>
+        </div>
+
+    
+    <script src="./js/script.js"></script>
+</body>
+</html>
