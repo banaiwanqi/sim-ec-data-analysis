@@ -111,7 +111,7 @@ body {
 /* KPI 卡片行 */
 .kpi-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 500px));
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-2xl);
 }
@@ -320,7 +320,7 @@ body {
     background: var(--text-secondary);
 }
 
-/* 工具提示（可选） */
+/* 工具提示 */
 .tooltip {
     position: relative;
     cursor: help;
