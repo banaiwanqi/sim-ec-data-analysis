@@ -13,10 +13,10 @@ POOL = dbutils.pooled_db.PooledDB(
     maxusage=None,  # 一个连接最多被重复使用的次数，None表示无限制
     setsession=[],  # 开始会话前执行的命令列表
     ping=0,  # ping Mysql服务端，检查是否服务可用
-    host=os.getenv("DB_HOST"),
-    port=int(os.getenv("DB_PORT")),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD"),
+    host=os.getenv("db_host"),
+    port=int(os.getenv("db_port")),
+    user=os.getenv("db_user"),
+    password=os.getenv("db_password"),
     database='ecommerce_dw',
     charset='utf8mb4'
 )

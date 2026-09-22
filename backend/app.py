@@ -29,13 +29,6 @@ def products():
     result = query(sql)
     return jsonify(result)
 
-@app.route('/api/regions')
-def regions():
-    # 获取地区销量和营收数据
-    sql = "select r.region_name, sum(f.order_num) as total_quantity, sum(f.order_amount) as total_revenue from fact_order f left join dim_region r on r.region_id = f.region_id group by r.region_name order by total_quantity desc"
-    result = query(sql)
-    return jsonify(result)
-
 @app.route('/api/members')
 def members():
     # 获取会员数量
