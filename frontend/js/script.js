@@ -377,13 +377,14 @@ fetch("api/conversion")
                     }
                 },
                 data: [
-                    {value: item.first_buy_user, name: '第一次购买用户数' },
-                    {value: item.first_buy_user, name: '多次购买用户数'}
+                    {value: item.first_buy_user, name: '首购用户' },
+                    {value: item.first_buy_user, name: '二次购买用户'}
                 ]
             },
               
             // 内层 实际漏斗
             {
+                name: '真实情况',
                 type: 'funnel',
                 left: '10%',
                 top: 60,
