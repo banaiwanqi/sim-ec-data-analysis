@@ -38,15 +38,32 @@ def regions():
 
 @app.route('/api/members')
 def members():
+    # 获取会员数量
     sql = "select user_level, count(*) as member_count from dim_user group by user_level"
     result = query(sql)
     return jsonify(result)
 
 @app.route('/api/regions-sales')
 def regions_sales():
+    # 获取地区购买量
     sql = "select da.province, sum(fo.order_num) as total_quantity from fact_order fo left join dim_area da on fo.area_id = da.area_id group by da.province"
     result = query(sql)
     return jsonify(result)
+
+@app.route('/api/repurchase')
+def repurchase():
+    # 按每月获取每月
+    sql = "with user_month_order as (select dt.`month` as order_month, fo.user_id, count(fo.order_id) as order_cnt from fact_order fo left join dim_time dt on dt.time_id = fo.time_id group by dt.`month`, fo.user_id) select order_month, count(distinct case when order_cnt >= 2 then user_id end) as rpc_user, count(distinct user_id) as total_user, round(count(distinct case when order_cnt >= 2 then user_id end) * 100.0 / count(distinct user_id),2) as repurchase_rate from user_month_order group by order_month;"
+    result = query(sql)
+    return jsonify(result)
+
+@app.route('/api/conversion')
+def conversion():
+    # 二次购买留存率
+    sql = "with user_first_order as (select user_id, min(dt.`month`) as first_month from fact_order fo left join dim_time dt on dt.time_id=fo.time_id group by user_id), user_total_order as (select fo.user_id, count(fo.order_id) as total_order_cnt from fact_order fo group by fo.user_id) select count(distinct case when total_order_cnt>=2 then ufo.user_id end) as repurchase_2nd_user, count(distinct ufo.user_id) as first_buy_user, round(count(distinct case when total_order_cnt>=2 then ufo.user_id end)*100.0/count(distinct ufo.user_id),2) as total_second_buy_rate from user_first_order ufo left join user_total_order uto on ufo.user_id=uto.user_id;"
+    result = query(sql)
+    return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port = 8080, debug=True)

@@ -119,6 +119,29 @@ fetch("api/products")
             }
 
         },
+        dataZoom: [
+            {
+                show: true,
+                start: 0,
+                end: 100
+            },
+            {
+                type: 'inside',
+                start: 75,
+                end: 100
+            },
+            {
+                show: true,
+                yAxisIndex: 0,
+                start: 25,
+                end: 0,
+                filterMode: 'empty',
+                with: 25,
+                height: '80%',
+                showDataShadow: false,
+                left:'93%'
+            }
+        ],
         series: { 
             data: data.map(d => d.total_amount), 
             type: 'bar', 
@@ -201,7 +224,7 @@ fetch("api/regions-sales")
                 min:minVal,
                 max:maxVal,
                 inRange: {
-                    color: ['#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695']
+                    color: ['#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#2563EB']
                 },
                 text: ['高', '低'],
                 calculable: true
@@ -231,5 +254,117 @@ fetch("api/regions-sales")
                     data: data.map(d => ({ name: d.province, value: d.total_quantity }))}
                 ]
         });
+    })
+})
+
+//月复购率
+fetch("api/repurchase")
+.then(r => r.json())
+.then(data => {
+    
+    const c = echarts.init(document.getElementById('chart-repurchase'));
+
+
+
+})
+
+//二次购买留存率
+fetch("api/conversion")
+.then(r => r.json())
+.then(data => {
+
+    const item = data[0];
+    const c = echarts.init(document.getElementById('chart-conversion'));
+
+    c.setOption({
+        tooltip: {
+            trigger:'item',
+            formatter: function(params){
+                return `${params.seriesName}<br/>${params.name}：${params.value}人<br/>转化率：${item.total_second_buy_rate}%`
+            }
+        },
+        toolbox: {
+            feature: {
+                dataView: { readOnly: false},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        series: [
+            // 外层 基准漏斗
+            {
+                color:['#2563EB', '#F97316'],
+                name: '理想状态',
+                type: 'funnel',
+                left: '10%',
+                top: 60,
+                bottom: 60,
+                width: '80%',
+                minSize: '0%',
+                maxSize: '100%',
+                sort: 'descending',
+                gap: 2,
+                label: {
+                    show: false
+                },
+                itemStyle: {
+                    borderColor: '#fff',
+                    borderWidth: 1,
+                    opacity:0.6
+                },
+                emphasis: {
+                    label:{
+                        show: false
+                    },
+                    labelLine: {
+                        show: false
+                    }
+                },
+                data: [
+                    {value: item.first_buy_user, name: '第一次购买用户数' },
+                    {value: item.first_buy_user, name: '多次购买用户数'}
+                ]
+            },
+              
+            // 内层 实际漏斗
+            {
+                name: '真实情况',
+                type: 'funnel',
+                left: '10%',
+                top: 60,
+                bottom: 60,
+                width: '80%',
+                minSize: '0%',
+                maxSize: '80%',
+                sort: 'descending',
+                gap: 2,
+                label: {
+                    show: true,
+                    position: 'inside'
+                },
+                labelLine: {
+                    length: 10,
+                    lineStyle: {
+                        width: 1,
+                        type: 'solid'
+                    }
+                },
+                itemStyle: {
+                    borderColor: '#fff',
+                    borderWidth: 1,
+                    opacity:0.8
+                },
+                emphasis: {
+                    label: {
+                        fontSize: 20
+                    }
+                },
+                z:100,
+                data: [
+                    {value: item.first_buy_user, name: '第一次购买用户数' },
+                    {value: item.repurchase_2nd_user, name: '多次购买用户数'}
+                ]
+            }
+        ]
     })
 })
