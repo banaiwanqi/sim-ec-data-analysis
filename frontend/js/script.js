@@ -79,7 +79,8 @@ fetch("api/monthly")
                     color: '#F97316',
                 },
                 smooth: true,
-            }],
+            }
+        ],
     })
 })
 
@@ -93,6 +94,13 @@ fetch("api/products")
             trigger: 'axis',
             axisPointer: {
                 type: 'shadow'
+            }
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataView: { readOnly: false },
+                saveAsImage: {}
             }
         },
         grid: {
@@ -123,12 +131,17 @@ fetch("api/products")
             {
                 show: true,
                 start: 0,
-                end: 100
+                end: 100,
+                height: 20,
+                bottom: 8,
             },
             {
                 type: 'inside',
+                yAxisIndex: 0,
                 start: 75,
-                end: 100
+                end: 100,
+                moveOnMouseWheel: true,
+                zoomOnMouseWheel: false
             },
             {
                 show: true,
@@ -136,10 +149,11 @@ fetch("api/products")
                 start: 25,
                 end: 0,
                 filterMode: 'empty',
-                with: 25,
+                width: 25,
                 height: '80%',
                 showDataShadow: false,
-                left:'93%'
+                left:'93%',
+                right: '5%'
             }
         ],
         series: { 
@@ -157,9 +171,16 @@ fetch("api/members")
 
     const c = echarts.init(document.getElementById('chart-members'));
     c.setOption({
-        color: palette,
+        color:['#2563EB', '#F97316', '#10B981'],
         tooltip: {
             trigger: 'item'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataView: { readOnly: false },
+                saveAsImage: {}
+            }
         },
         legend: {
             orient: 'vertical',
@@ -189,7 +210,6 @@ fetch("api/members")
             }
         ]
     })
-
 })
 
 //地区销量分布
@@ -224,18 +244,15 @@ fetch("api/regions-sales")
                 min:minVal,
                 max:maxVal,
                 inRange: {
-                    color: ['#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#2563EB']
+                    color: ['#f0f7ff', '#d9eafb', '#b1cff2', '#4575b4', '#2563EB']
                 },
                 text: ['高', '低'],
                 calculable: true
             },
             toolbox: {
                 show: true,
-                left: 'left',
-                top:'top',
                 feature: {
                     dataView: { readOnly: false },
-                    restore: {},
                     saveAsImage: {}
                 }
             },
@@ -251,21 +268,61 @@ fetch("api/regions-sales")
                         }
                     },
 
-                    data: data.map(d => ({ name: d.province, value: d.total_quantity }))}
-                ]
+                    data: data.map(d => ({ name: d.province, value: d.total_quantity }))
+                }
+            ]
         });
     })
 })
 
-//月复购率
+//月复购用户统计
 fetch("api/repurchase")
 .then(r => r.json())
 .then(data => {
     
     const c = echarts.init(document.getElementById('chart-repurchase'));
 
+    c.setOption({
+        color: ['#2563EB', '#F97316'],
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            data: ['总购买用户', '多次购买用户']
+        },
+        toolbox: {
+            feature: {
+                magicType: { show: true, type: ['line', 'bar'] },
+                dataView: { readOnly: false},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            data: data.map(d => d.order_month)
+        },
+        yAxis: [
+            {
+            type: 'value',
+            }
+        ],
 
-
+        
+        series: [
+            {
+                name: '总购买用户',
+                type: 'bar',
+                data: data.map(d => d.total_user),
+                smooth: true
+            },
+            {
+                name: '多次购买用户',
+                type: 'bar',
+                data: data.map(d => d.rpc_user),
+                smooth: true
+            }
+        ]
+    })
 })
 
 //二次购买留存率
@@ -286,7 +343,6 @@ fetch("api/conversion")
         toolbox: {
             feature: {
                 dataView: { readOnly: false},
-                restore: {},
                 saveAsImage: {}
             }
         },
@@ -328,7 +384,6 @@ fetch("api/conversion")
               
             // 内层 实际漏斗
             {
-                name: '真实情况',
                 type: 'funnel',
                 left: '10%',
                 top: 60,
@@ -361,8 +416,8 @@ fetch("api/conversion")
                 },
                 z:100,
                 data: [
-                    {value: item.first_buy_user, name: '第一次购买用户数' },
-                    {value: item.repurchase_2nd_user, name: '多次购买用户数'}
+                    {value: item.first_buy_user, name: '首购用户' },
+                    {value: item.repurchase_2nd_user, name: '二次购买用户'}
                 ]
             }
         ]

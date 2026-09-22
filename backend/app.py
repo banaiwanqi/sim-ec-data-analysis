@@ -39,7 +39,7 @@ def regions():
 @app.route('/api/members')
 def members():
     # 获取会员数量
-    sql = "select user_level, count(*) as member_count from dim_user group by user_level"
+    sql = "select user_level, count(*) as member_count from dim_user group by user_level order by user_level desc"
     result = query(sql)
     return jsonify(result)
 
