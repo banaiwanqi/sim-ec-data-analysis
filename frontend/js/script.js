@@ -126,3 +126,110 @@ fetch("api/products")
         },
     })
 })
+
+//会员等级分布
+fetch("api/members")
+.then(r => r.json())
+.then(data => {
+
+    const c = echarts.init(document.getElementById('chart-members'));
+    c.setOption({
+        color: palette,
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+        },
+        emphasis: {
+            label: {
+                show: true,
+                fontSize: '16',
+                fontWeight: 'bold'
+            }
+        },
+        series: [
+            {
+                name: '会员等级分布',
+                type: 'pie',
+                radius: '50%',
+                data: data.map(d => ({ value: d.member_count, name: `${d.user_level}级会员` })),
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10, 
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(55, 39, 39, 0.8)'
+                    }
+
+                }
+            }
+        ]
+    })
+
+})
+
+//地区销量分布
+fetch("api/regions-sales")
+.then(r => r.json())
+.then(data => {
+    const c = echarts.init(document.getElementById('chart-regions'));
+
+    //寻找最大最小值
+    const values = data.map(d => d.total_quantity);
+    const maxVal = Math.max(...values);
+    const minVal = Math.min(...values);
+
+    c.showLoading();
+
+    $.get('./static/china.json', function (chinaJson) {
+        c.hideLoading();
+        echarts.registerMap('china', chinaJson);
+        c.setOption({
+            title: {
+                textContent: '地区销量分布',
+                left: 'center',
+                top: 20,
+            },
+            tooltip: {
+                trigger: 'item',
+                showDelay: 0,
+                transitionDuration: 0.2,
+            },
+            visualMap: {
+                left: 'right',
+                min:minVal,
+                max:maxVal,
+                inRange: {
+                    color: ['#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695']
+                },
+                text: ['高', '低'],
+                calculable: true
+            },
+            toolbox: {
+                show: true,
+                left: 'left',
+                top:'top',
+                feature: {
+                    dataView: { readOnly: false },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: '销量',
+                    type: 'map',
+                    map: 'china',
+                    roam: true,
+                    emphasis: {
+                        label: {
+                            show: true 
+                        }
+                    },
+
+                    data: data.map(d => ({ name: d.province, value: d.total_quantity }))}
+                ]
+        });
+    })
+})

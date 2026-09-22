@@ -111,7 +111,7 @@ body {
 /* KPI 卡片行 */
 .kpi-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 500px));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-2xl);
 }
@@ -365,5 +365,6 @@ body {
     
     .chart-box {
         height: 300px;
+        width: 400px;
     }
 }
