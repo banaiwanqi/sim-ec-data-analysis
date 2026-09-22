@@ -36,6 +36,17 @@ def regions():
     result = query(sql)
     return jsonify(result)
 
+@app.route('/api/members')
+def members():
+    sql = "select user_level, count(*) as member_count from dim_user group by user_level"
+    result = query(sql)
+    return jsonify(result)
+
+@app.route('/api/regions-sales')
+def regions_sales():
+    sql = "select da.province, sum(fo.order_num) as total_quantity from fact_order fo left join dim_area da on fo.area_id = da.area_id group by da.province"
+    result = query(sql)
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port = 8080, debug=True)
