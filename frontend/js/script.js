@@ -138,16 +138,16 @@ fetch("api/products")
             {
                 type: 'inside',
                 yAxisIndex: 0,
-                start: 75,
-                end: 100,
+                start: 0,
+                end: 25,
                 moveOnMouseWheel: true,
                 zoomOnMouseWheel: false
             },
             {
                 show: true,
                 yAxisIndex: 0,
-                start: 25,
-                end: 0,
+                start: 75,
+                end: 100,
                 filterMode: 'empty',
                 width: 25,
                 height: '80%',
